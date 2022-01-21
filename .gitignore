@@ -1,0 +1,4 @@
+/node_modules
+.env
+
+# mongodb://localhost:27017/breif7GestiondeLivraison
