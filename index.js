@@ -19,7 +19,7 @@ app.use(express.json());
 app.use('/api/admin', require('./routes/admin_genirale'));
 app.use('/api/manager', require('./routes/manager'));
 app.use('/api/responsableLivraison', require('./routes/responsableLivraison'));
-// app.use('/api/chauffeur', chauffeur);
+app.use('/api/chauffeur', require('./routes/chauffeur'));
 // app.use('/api/livraisant', camion);
 // app.use('/api/commande', commande);
 // app.use('/api/prime', prime);
