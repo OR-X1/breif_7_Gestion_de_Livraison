@@ -17,11 +17,6 @@ const admin_geniraleSchema = new Schema({
   password_admin: {
     type: String,
     required: true
-  },  
-  created_at_admin: {
-    type: Date,
-    required: true,
-    default: Date.now
   }
 }, { timestamps: true });
 

@@ -17,12 +17,8 @@ const managerSchema = new Schema({
   password_manager: {
     type: String,
     required: true
-  },  
-  created_at_manager: {
-    type: Date,
-    required: true,
-    default: Date.now
   }
+  
 }, { timestamps: true });
 
 const manager = mongoose.model('manager', managerSchema);

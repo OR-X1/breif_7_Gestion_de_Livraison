@@ -13,11 +13,6 @@ const vehiculeSchema = new Schema({
   matricule: {
     type: String,
     required: true
-  },  
-  created_at_vehicule: {
-    type: Date,
-    required: true,
-    default: Date.now
   }
 }, { timestamps: true });
 

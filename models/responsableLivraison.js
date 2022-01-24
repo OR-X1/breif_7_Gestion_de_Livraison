@@ -18,11 +18,15 @@ const responsableLivraisonSchema = new Schema({
     type: String,
     required: true
   },  
-  created_at_responsableL: {
-    type: Date,
-    required: true,
-    default: Date.now
-  }
+  manager_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "manager"
+  },
+  role: {
+    type: String,
+    default: "responsableLivraison"
+  },  
+  
 }, { timestamps: true });
 
 const responsableLivraison = mongoose.model('responsableLivraison', responsableLivraisonSchema);

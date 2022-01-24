@@ -17,12 +17,34 @@ const chauffeurSchema = new Schema({
   password_chauffeur: {
     type: String,
     required: true
-  },  
-  created_at_chauffeur: {
-    type: Date,
-    required: true,
-    default: Date.now
-  }
+  },
+  role: {
+    type: String,
+    default: "chauffeur"
+  },
+  prime: {
+    type: Number,    
+    default: 0
+  },
+  manager_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "manager"
+  },
+  vehicule_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "vehicule"
+  },
+  livraisons: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "livraisant",
+    },
+  ],
+  // created_at_chauffeur: {
+  //   type: Date,
+  //   required: true,
+  //   default: Date.now
+  // }
 }, { timestamps: true });
 
 const chauffeur = mongoose.model('chauffeur', chauffeurSchema);

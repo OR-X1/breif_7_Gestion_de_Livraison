@@ -26,15 +26,15 @@ const livraisantSchema = new Schema({
         type: String,
         required: true
     },
+    zone: {
+        type: String,
+        required: true
+    },
     status: {
         type: String,
         required: true
     },
-    livraisant: {
-      type: Date,
-      required: true,
-      default: Date.now
-    }
+    
 }, { timestamps: true });
 
 const livraisant = mongoose.model('livraisant', livraisantSchema);
