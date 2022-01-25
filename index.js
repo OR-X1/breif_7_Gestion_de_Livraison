@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express();
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser')
 // const admin = require('./models/admin_genirale');
 // const manager = require('./models/manager');
 const dotenv = require('dotenv')
@@ -15,12 +16,14 @@ const dbURI = "mongodb://127.0.0.1:27017/breif7GestiondeLivraison";
 
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
+app.use(cookieParser())
 
 app.use('/api/admin', require('./routes/admin_genirale'));
 app.use('/api/manager', require('./routes/manager'));
 app.use('/api/responsableLivraison', require('./routes/responsableLivraison'));
 app.use('/api/chauffeur', require('./routes/chauffeur'));
-// app.use('/api/livraisant', camion);
+app.use('/api/livraisant', require('./routes/livraisant'));
+app.use('/api/vehicule', require('./routes/vehicule'));
 // app.use('/api/commande', commande);
 // app.use('/api/prime', prime);
 

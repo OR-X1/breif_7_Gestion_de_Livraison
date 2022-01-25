@@ -2,17 +2,16 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 // const Manager = require("../models/manager");
 const responsableLivraison = require("../models/responsableLivraison");
-const chauffeur = require("../models/chauffeur");
 
-const emailsend = require('../controllers/email')
+const emailsend = require('../services/email/email')
 
-exports.getmanager = async (req, res) => {
+exports.getresponsableLivraison = async (req, res) => {
 
     const {
         id,
     } = req.params
 
-    Manager.findOne({
+    responsableLivraison.findOne({
         _id: id
           })
     // Manager.find()
@@ -64,6 +63,7 @@ exports.login = async (req, res) => {
                 }, process.env.JWT_SECRET, {
                     expiresIn: process.env.JWT_EXPIRE_IN
                 })
+                res.cookie('token', token, { httpOnly: true })
                 return res.status(200).send({
                     msg: "lOGIN SUCCES",
                     data_login_manager: login_responsableL,
@@ -75,3 +75,87 @@ exports.login = async (req, res) => {
     }
 }
 
+
+
+
+
+// CRUD responsable Livraison -------------------------------------
+
+exports.getAll_responsableLivraison = async (req, res) => {
+
+    // const {
+    //     id,
+    // } = req.params
+
+    responsableLivraison.find()
+          .then(result => {
+            return res.status(200).json({
+                msg: "fetch all data",
+                result
+            })
+          })
+          .catch(err => {
+            console.log(err);
+          });
+}
+
+exports.create_responsableLivraison = (req, res) => {
+    const {
+        name_responsableL,
+        lastname_responsableL,
+        email_responsableL,
+        password_responsableL,
+        passwordconfirm
+    } = req.body
+
+    responsableLivraison.findOne({
+        email_responsableL: email_responsableL
+          })
+          .then(result => {
+              console.log(result);
+            if (result) {
+                return res.status(200).send({
+                    msg: "email as ready used"
+                })
+            } else if (password_responsableL !== passwordconfirm) {
+                return res.status(200).send({
+                    msg: "Password do not match"
+                })
+            }
+            let hashedpassword =  bcrypt.hashSync(password_responsableL, 10)
+            console.log(hashedpassword)
+
+            const manager = new responsableLivraison({
+                name_responsableL: name_responsableL,
+                lastname_responsableL: lastname_responsableL,
+                email_responsableL: email_responsableL,
+                password_responsableL: hashedpassword
+              })
+            
+              manager.save()
+                .then(result => {
+
+                    let subj = "Your Login Info";
+                    let msg = ` email : ${email_responsableL}
+                                password : ${password_responsableL}
+                        `;
+                    emailsend.mail(email_responsableL, subj, msg)
+
+
+                    console.log(result);
+                    return res.status(200).json({
+                        msg: "Add manager",
+                        result
+                    })
+                  })
+                .catch(err => {
+                  console.log(err);
+                });
+
+
+          })
+          .catch(err => {
+            console.log(err);
+          });
+
+}

@@ -3,6 +3,11 @@ const express = require('express');
 const router = express.Router();
 const responsableLivraison = require('../controllers/responsableLivraison')
 
+
+
+router.get('/getAll_responsableLivraison', responsableLivraison.getAll_responsableLivraison)
+router.get('/:id', responsableLivraison.getresponsableLivraison)
+router.post('/create_responsableLivraison', responsableLivraison.create_responsableLivraison)
 // routes admin_genirale
 // router.get('/:id', manager.getmanager)
 // router.post('/', manager.getAdmin)

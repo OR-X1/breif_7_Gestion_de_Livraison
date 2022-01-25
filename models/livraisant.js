@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const livraisantSchema = new Schema({
     date_depart: {
-        type: date,
+        type: Date,
         required: true
     },
     ville_depart: {
@@ -15,15 +15,15 @@ const livraisantSchema = new Schema({
         required: true
     },
     poids: {
-        type: String,
+        type: Number,
         required: true
     },
     prix: {
-        type: String,
+        type: Number,
         required: true
     },
     distance_km: {
-        type: String,
+        type: Number,
         required: true
     },
     zone: {
@@ -32,8 +32,8 @@ const livraisantSchema = new Schema({
     },
     status: {
         type: String,
-        required: true
-    },
+        default: "disponible"
+    }
     
 }, { timestamps: true });
 
