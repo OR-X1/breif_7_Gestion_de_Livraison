@@ -179,7 +179,6 @@ exports.acceptCommande = async(req,res)=>{
 
     console.log(id_chauffeur);
     try{
-    //   const token = jsonwebtoken.decode(req.cookies.token);
       const chauf = await chauffeur.updateOne(
         { _id:id_chauffeur },
         {$push:{livraisons:id_livaraison}}
@@ -204,3 +203,78 @@ exports.acceptCommande = async(req,res)=>{
       })
   }
   }
+
+  exports.chauffeurPrime = async(req,res,next)=>{
+    const mois  = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre "] ;
+    let date = new Date();
+    let nameMois = mois[date.getMonth()];
+    try {
+        let distance = 0;
+        let prix = 0;
+        const PrimeGetByChauffeur = await prime.find({chauffeur:req.params.id}).populate("livraison")
+        PrimeGetByChauffeur.forEach(element => {
+            if(element.mois == nameMois){
+                distance += parseInt(element.livraison.distance_kilometrage);
+                prix += parseInt(element.livraison_prix)
+            }
+        });
+        montantPrime = 0;
+        if(distance => 1000 && distance <= 1999 ){
+            montantPrime = prix * 0.15
+        }else if(distance => 2000 && distance <= 2999){
+            montantPrime = prix * 0.22
+        }else if(distance => 2500){
+            montantPrime = prix * 0.3
+        }
+        res.json(montantPrime)
+    }catch (err) {
+        res.status(500).json({ message: err.message })
+    }
+}
+
+const Prime = async(req,res)=>{
+    try {
+        const jeton = req.cookies.token;
+        const token = jwt.decode(jeton)
+        const Chauffeur_id = token.user
+
+        let totaleDistance = 0;
+        let allLivraison =[];
+
+        let prix = 0 ;
+        let prime = 0 ;
+    
+        // prendre la livraison affectée 
+        const chauffeur = await Chauffeur.findById({ _id:Chauffeur_id })
+
+        await Promise.all( chauffeur.livraisons.map(async(element) => {
+        console.log(element)
+        const livraison = await Livraison.findById({ _id: element })
+        allLivraison.push(livraison)
+        totaleDistance+=livraison.distance 
+        prix+=livraison.prix 
+
+        }))
+         
+        
+
+        if (totaleDistance === 1000) {
+            prime = prix * 0.15
+            const result = await Chauffeur.updateOne({ _id: Chauffeur_id }, { prime: prime });
+            res.json({ result, prime })
+          } else if (totaleDistance > 1000 && totaleDistance <= 2000) {
+            prime = prix * 0.22
+            const result = await Chauffeur.updateOne({ _id: Chauffeur_id }, { prime: prime });
+            res.json({ result, prime })
+          } else if (totaleDistance > 2000 && totaleDistance <= 2500) {
+            prime = prix * 0.33
+            const result = await Chauffeur.updateOne({ _id: Chauffeur_id }, { prime: prime });
+            res.json({ result, prime })
+          }
+    
+    }
+    catch (err){
+        console.error(err)
+        res.status(500).send();
+    }
+        }

@@ -2,8 +2,6 @@ const express = require('express')
 const app = express();
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser')
-// const admin = require('./models/admin_genirale');
-// const manager = require('./models/manager');
 const dotenv = require('dotenv')
 
 dotenv.config({
@@ -24,8 +22,6 @@ app.use('/api/responsableLivraison', require('./routes/responsableLivraison'));
 app.use('/api/chauffeur', require('./routes/chauffeur'));
 app.use('/api/livraisant', require('./routes/livraisant'));
 app.use('/api/vehicule', require('./routes/vehicule'));
-// app.use('/api/commande', commande);
-// app.use('/api/prime', prime);
 
 
 
@@ -39,14 +35,4 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
     console.log(err)
   });
 
-
-
-
-
-//define routes
-// app.use('/auth/generaladmin', require('./routes/admin_genaral/generaladmin_auth'));
-
-// app.listen(3000, () => {
-//     console.log("Up Server")
-// })
 

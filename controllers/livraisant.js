@@ -8,47 +8,47 @@ const emailsend = require('../services/email/email')
 
 // const emailsend = require('../controllers/email')
 
-// exports.getlivraisant = async (req, res) => {
+exports.getlivraisant = async (req, res) => {
 
-//     const {
-//         id,
-//     } = req.params
+    const {
+      status,
+    } = req.params
 
-//     livraisant.findOne({
-//         _id: id
-//           })
-//     // Manager.find()
-//               .then(result => {
-//                 return res.status(200).json({
-//                     msg: "fetch all data",
-//                     result
-//                 })
-//               })
-//               .catch(err => {
-//                 console.log(err);
-//               });
-// }
+    livraisant.find({
+      status: status
+          })
+    // Manager.find()
+              .then(result => {
+                return res.status(200).json({
+                    msg: "fetch all data",
+                    result
+                })
+              })
+              .catch(err => {
+                console.log(err);
+              });
+}
 
 
-// CRUD chauffeur -------------------------------------
+// CRUD livraisant -------------------------------------
 
-// exports.getAll_livraisant = async (req, res) => {
+exports.getAll_livraisant = async (req, res) => {
 
-//     // const {
-//     //     id,
-//     // } = req.params
+    // const {
+    //     id,
+    // } = req.params
 
-//     livraisant.find()
-//           .then(result => {
-//             return res.status(200).json({
-//                 msg: "fetch all data",
-//                 result
-//             })
-//           })
-//           .catch(err => {
-//             console.log(err);
-//           });
-// }
+    livraisant.find()
+          .then(result => {
+            return res.status(200).json({
+                msg: "fetch all data",
+                result
+            })
+          })
+          .catch(err => {
+            console.log(err);
+          });
+}
 
 exports.create_livraisant = async (req, res) => {
     const {
