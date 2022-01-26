@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const chauffeur = require("../models/chauffeur");
+const livraisant = require("../models/livraisant");
 
+const logger = require('../logger/logger');
 const emailsend = require('../services/email/email')
 
 exports.getchauffeur = async (req, res) => {
@@ -97,7 +99,7 @@ exports.getAll_chauffeur = async (req, res) => {
           });
 }
 
-exports.create_chauffeur = (req, res) => {
+exports.create_chauffeur = async(req, res) => {
     const {
         name_chauffeur,
         lastname_chauffeur,
@@ -164,3 +166,41 @@ exports.create_chauffeur = (req, res) => {
           });
 
 }
+
+exports.acceptCommande = async(req,res)=>{
+
+    const {
+        id_livaraison
+    } = req.body
+
+    const jetonken = req.cookies.token;
+    const token = jwt.decode(jetonken)
+    const id_chauffeur = token.id
+
+    console.log(id_chauffeur);
+    try{
+    //   const token = jsonwebtoken.decode(req.cookies.token);
+      const chauf = await chauffeur.updateOne(
+        { _id:id_chauffeur },
+        {$push:{livraisons:id_livaraison}}
+      );
+      const livrai = await livraisant.updateOne({_id:id_livaraison},{status:'non disponible'})
+      const getLivraison = await livraisant.find({_id:id_livaraison})
+      console.log(getLivraison);
+
+
+    //   une livraison de 140kg va être faite par voiture le 14/03/2022 de la ville de Safi vers la ville d'Agadir: Chauffeur Ali Ahmed
+      logger.info(`une livraiant de ${getLivraison[0].poids}kg va être faite par (voiture) le ${getLivraison[0].date_depart} de la ville de ${getLivraison[0].ville_depart} vers la ville ${getLivraison[0].ville_arrive}: Chauffeur ${token.name_chauffeur} ${token.lastname_chauffeur}`)
+      res.status(200).json({
+        success: 1,
+        chauf,
+        getLivraison,
+      });
+  
+    }catch(error){
+      res.status(500).json({
+          success : 0,
+          message:error.message
+      })
+  }
+  }
