@@ -28,7 +28,7 @@ exports.login = async (req, res) => {
         console.log(req.body)
         if (!email_admin || !password_admin) {
             return res.status(200).send({
-                msg: "Please add an email and password"
+                err: "Please add an email and password"
             })
         }
 
